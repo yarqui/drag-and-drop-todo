@@ -37,3 +37,9 @@ if (isDog(pet)) {
 } else {
   pet.swim(); // TypeScript знає, що якщо pet не Dog, то це має бути Fish
 }
+
+const button = document.querySelector("button");
+
+button?.addEventListener("click", () => {
+  console.log("clicked");
+});
