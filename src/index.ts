@@ -1,35 +1,23 @@
-import concatenation from "./concatenation";
+type Dog = {
+  legs: 4;
+  bark: () => void;
+};
 
-const button = document.querySelector("button");
-const input = document.querySelector("input");
+type Fish = {
+  fins: 2;
+  swim: () => void;
+};
 
-if (button && input) {
-  button.addEventListener("click", () => {
-    concatenation(input.value, "Hi!");
-  });
+let pet: Dog | Fish;
+
+// type guard function
+function isDog(pet: Dog | Fish): pet is Dog {
+  return "bark" in pet;
 }
 
-let matrix: number[][][];
-
-matrix = [
-  [
-    [1, 6],
-    [3, 5],
-  ],
-  [
-    [8, 1],
-    [9, 2],
-  ],
-  [],
-];
-
-console.log(matrix[1][0][0]);
-
-let users: { name: string; age: number }[][];
-
-users = [
-  [
-    { name: "Yar", age: 37 },
-    { name: "Ira", age: 36 },
-  ],
-];
+// Перевіряємо, чи є наш вихованець собакою перед тим, як використовувати метод bark
+if (isDog(pet)) {
+  pet.bark(); // OK, тепер TypeScript знає, що pet - це Dog
+} else {
+  pet.swim(); // TypeScript знає, що якщо pet не Dog, то це має бути Fish
+}
