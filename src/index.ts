@@ -1,45 +1,31 @@
-type Dog = {
-  legs: 4;
-  bark: () => void;
+type User = {
+  id: string;
+  name: string;
+  email: string;
 };
 
-type Fish = {
-  fins: 2;
-  swim: () => void;
+type Users = {
+  [id: string]: User;
 };
 
-let pet: Dog | Fish;
+let users: Users = {};
+console.log("users:", users);
 
-// type guard function
-function isDog(pet: Dog | Fish): pet is Dog {
-  return "bark" in pet;
-}
+let Alex: User = {
+  id: "1",
+  name: "Alex",
+  email: "alex@example.com",
+};
+console.log("Alex:", Alex);
 
-let Doggy: Dog = {
-  legs: 4,
-  bark: () => {
-    console.log("bark");
-  },
+let Yar: User = {
+  id: "2",
+  name: "Yar",
+  email: "email address",
 };
 
-let Fishy: Fish = {
-  fins: 2,
-  swim: () => {
-    console.log("swoosh");
-  },
-};
+users[Alex.id] = Alex;
+console.log("[Alex.id]:", [Alex.id]);
+users[Yar.id] = Yar;
 
-pet = Fishy;
-
-// Перевіряємо, чи є наш вихованець собакою перед тим, як використовувати метод bark
-if (isDog(pet)) {
-  pet.bark(); // OK, тепер TypeScript знає, що pet - це Dog
-} else {
-  pet.swim(); // TypeScript знає, що якщо pet не Dog, то це має бути Fish
-}
-
-const button = document.querySelector("button");
-
-button?.addEventListener("click", () => {
-  console.log("clicked");
-});
+console.log("users:", users);
