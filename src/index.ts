@@ -1,31 +1,24 @@
-type User = {
-  id: string;
-  name: string;
-  email: string;
-};
+class Department {
+  // private name: string;
+  private employees: string[] = [];
 
-type Users = {
-  [id: string]: User;
-};
+  constructor(private readonly id: string, public name: string) {}
 
-let users: Users = {};
-console.log("users:", users);
+  describe(this: Department) {
+    console.log(`Department: ${this.name} with id: ${this.id}`);
+  }
 
-let Alex: User = {
-  id: "1",
-  name: "Alex",
-  email: "alex@example.com",
-};
-console.log("Alex:", Alex);
+  addEmployee(employee: string) {
+    this.employees.push(employee);
+  }
 
-let Yar: User = {
-  id: "2",
-  name: "Yar",
-  email: "email address",
-};
+  getEmployeeInfo() {
+    console.log(this.employees.length);
+    console.log(this.employees);
+  }
+}
 
-users[Alex.id] = Alex;
-console.log("[Alex.id]:", [Alex.id]);
-users[Yar.id] = Yar;
+const sales = new Department("id1", "Sales");
+sales.describe();
 
-console.log("users:", users);
+const salesCopy = { id: "ds2", name: "Yar", describe: sales.describe };
