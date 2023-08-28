@@ -1,7 +1,13 @@
 class Department {
   protected employees: string[] = [];
+  static currentYear: string = "2023";
 
   constructor(private id: string, public name: string) {}
+
+  static createEmployee(name: string) {
+    console.log("year in constructor", this.currentYear);
+    return { name };
+  }
 
   describe(this: Department) {
     console.log(`Department: ${this.name} with id: ${this.id}`);
@@ -81,5 +87,11 @@ const accounting = new Accounting("id2");
 // accounting.addReport("Another one to check");
 // accounting.addReport("AAAnd another one to check");
 // accounting.printReports();
-accounting.mostRecentReport = "A new report has come";
+accounting.mostRecentReport = "A new financial report";
 console.log(accounting.mostRecentReport);
+
+const employee1 = Department.createEmployee("Yarquiiii");
+console.log("employee1:", employee1);
+const employee2 = Accounting.createEmployee("Broo");
+console.log("employee2:", employee2);
+const newDep = new Department("id93", "newDepatmant");
