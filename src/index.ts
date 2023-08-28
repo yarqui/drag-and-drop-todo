@@ -12,8 +12,8 @@ class Department {
   }
 
   getEmployeeInfo(): void {
-    console.log(this.employees.length);
-    console.log(this.employees);
+    console.log("employees count: ", this.employees.length);
+    console.log("employees: ", this.employees);
   }
 }
 
@@ -24,13 +24,27 @@ class ITDepartment extends Department {
 }
 
 const it = new ITDepartment("id1", ["Yar"]);
-it.addEmployee("Mauritius");
-it.addEmployee("Valentine");
-it.getEmployeeInfo();
-it.describe();
+// it.addEmployee("Mauritius");
+// it.addEmployee("Valentine");
+// it.getEmployeeInfo();
 
 class Accounting extends Department {
+  private lastReport: string = "";
   private reports: string[] = [];
+
+  public get mostRecentReport(): string {
+    if (!this.lastReport) {
+      throw new Error("There are no reports");
+    }
+    return this.lastReport;
+  }
+
+  public set mostRecentReport(v: string) {
+    if (!v) {
+      throw new Error("Please, pass a value to set a report");
+    }
+    this.addReport(v);
+  }
 
   constructor(id: string) {
     super(id, "AccountingDep");
@@ -44,23 +58,28 @@ class Accounting extends Department {
   }
 
   getEmployeeInfo(): void {
-    console.log(this.employees);
+    console.log("accounting employees", this.employees);
   }
 
   addReport = (report: string) => {
     this.reports.push(report);
+    this.lastReport = report;
   };
 
-  printReport() {
-    console.log(this.reports);
+  printReports() {
+    console.log("accounting reports: ", this.reports);
   }
 }
 
-const accounting = new Accounting("iddee");
-
-accounting.addEmployee("rus");
-accounting.addEmployee("Freddy");
-accounting.getEmployeeInfo();
-
-accounting.addReport("This is the report that we have to do");
-accounting.printReport();
+const accounting = new Accounting("id2");
+// accounting.addEmployee("rus");
+// accounting.addEmployee("Freddy");
+// accounting.getEmployeeInfo();
+// accounting.printLastReport();
+// accounting.addReport("This is the report that we have to do");
+// accounting.printReports();
+// accounting.addReport("Another one to check");
+// accounting.addReport("AAAnd another one to check");
+// accounting.printReports();
+accounting.mostRecentReport = "A new report has come";
+console.log(accounting.mostRecentReport);
