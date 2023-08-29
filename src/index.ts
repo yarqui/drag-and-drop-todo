@@ -34,7 +34,7 @@ class ITDepartment extends Department {
   }
 }
 const it = new ITDepartment("id1", ["Yar"]);
-it.describe();
+// it.describe();
 // it.addEmployee("Mauritius");
 // it.getEmployeeInfo();
 
@@ -44,8 +44,9 @@ it.describe();
 class Accounting extends Department {
   private lastReport: string = "";
   private reports: string[] = [];
+  private static instance: Accounting;
 
-  constructor(id: string) {
+  private constructor(id: string) {
     super(id, "AccountingDep");
   }
 
@@ -55,12 +56,19 @@ class Accounting extends Department {
     }
     return this.lastReport;
   }
-
   public set mostRecentReport(v: string) {
     if (!v) {
       throw new Error("Please, pass a value to set a report");
     }
     this.addReport(v);
+  }
+
+  static createInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+    this.instance = new Accounting("id2");
+    return this.instance;
   }
 
   describe(): void {
@@ -88,7 +96,10 @@ class Accounting extends Department {
   }
 }
 
-const accounting = new Accounting("id2acc");
+const accounting = Accounting.createInstance();
+const accounting2 = Accounting.createInstance();
+console.log(accounting === accounting2);
+// const accounting = new Accounting("id2acc");
 // accounting.addEmployee("rus");
 // accounting.addEmployee("Freddy");
 // accounting.addReport("This is the report that we have to do");
