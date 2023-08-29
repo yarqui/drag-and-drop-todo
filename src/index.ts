@@ -1,17 +1,15 @@
-class Department {
+abstract class Department {
   protected employees: string[] = [];
   static currentYear: string = "2023";
 
-  constructor(private id: string, public name: string) {}
+  constructor(protected id: string, public name: string) {}
 
   static createEmployee(name: string) {
     console.log("year in constructor", this.currentYear);
     return { name };
   }
 
-  describe(this: Department) {
-    console.log(`Department: ${this.name} with id: ${this.id}`);
-  }
+  abstract describe(this: Department): void;
 
   addEmployee(employee: string) {
     this.employees.push(employee);
@@ -23,20 +21,33 @@ class Department {
   }
 }
 
+// ===============
+// IT dep
+// ===============
 class ITDepartment extends Department {
   constructor(id: string, public admins: string[]) {
     super(id, "IT");
   }
-}
 
+  describe(): void {
+    console.log(`This IT Department - ID: ${this.id}`);
+  }
+}
 const it = new ITDepartment("id1", ["Yar"]);
+it.describe();
 // it.addEmployee("Mauritius");
-// it.addEmployee("Valentine");
 // it.getEmployeeInfo();
 
+// ===============
+// Accounting dep
+// ===============
 class Accounting extends Department {
   private lastReport: string = "";
   private reports: string[] = [];
+
+  constructor(id: string) {
+    super(id, "AccountingDep");
+  }
 
   public get mostRecentReport(): string {
     if (!this.lastReport) {
@@ -52,8 +63,8 @@ class Accounting extends Department {
     this.addReport(v);
   }
 
-  constructor(id: string) {
-    super(id, "AccountingDep");
+  describe(): void {
+    console.log("This Accounting Department - ID: " + this.id);
   }
 
   addEmployee(employee: string): void {
@@ -77,21 +88,15 @@ class Accounting extends Department {
   }
 }
 
-const accounting = new Accounting("id2");
+const accounting = new Accounting("id2acc");
 // accounting.addEmployee("rus");
 // accounting.addEmployee("Freddy");
-// accounting.getEmployeeInfo();
-// accounting.printLastReport();
 // accounting.addReport("This is the report that we have to do");
-// accounting.printReports();
-// accounting.addReport("Another one to check");
 // accounting.addReport("AAAnd another one to check");
 // accounting.printReports();
-accounting.mostRecentReport = "A new financial report";
-console.log(accounting.mostRecentReport);
 
-const employee1 = Department.createEmployee("Yarquiiii");
-console.log("employee1:", employee1);
-const employee2 = Accounting.createEmployee("Broo");
-console.log("employee2:", employee2);
-const newDep = new Department("id93", "newDepatmant");
+accounting.mostRecentReport = "A new financial report";
+accounting.describe();
+
+// const employee1 = Department.createEmployee("Yarquiiii");
+// console.log("employee1:", employee1);
