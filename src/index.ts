@@ -1,29 +1,72 @@
-interface Named {
-  readonly name: string;
-}
+type Combinable = string | number;
 
-interface Greetable extends Named {
-  greet(phrase: string): void;
-}
+type Numeric = boolean | number;
 
-class Person implements Greetable {
+type Universal = Numeric & Combinable;
+
+const adder = (a: Combinable, b: Combinable) => {
+  // 📍 type guard 'typeof'
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+
+  return a + b;
+};
+
+// ==========================
+type Employee = {
   name: string;
-  age?: number;
+};
 
-  constructor(n: string, age?: number) {
-    this.name = n;
+type Admin = {
+  name: string;
+  privileges: string[];
+};
 
-    if (age) {
-      this.age = age;
-    }
+type UnknownEmployee = Employee | Admin;
+
+const printEmployeeInfo = (employee: UnknownEmployee) => {
+  console.log(employee.name);
+  // 📍 type guard 'in' to check if there is the property in the object
+  if ("privileges" in employee) {
+    console.log(employee.privileges);
   }
+};
 
-  greet(phrase: string): void {
-    console.log(`${phrase} ${this.name}. Your age is: ${this.age}`);
+printEmployeeInfo({
+  name: "Yar",
+  privileges: ["hard work access", "perseverance"],
+});
+//  =========================
+
+// 📍 type guard 'instance of' using classes
+class Car {
+  drive() {
+    console.log("Driving a car");
   }
 }
 
-let user1: Greetable;
+class Truck {
+  drive() {
+    console.log("Driving a truck...");
+  }
 
-user1 = new Person("Yar");
-console.log("user1:", user1);
+  loadCargo(weight: number) {
+    console.log(`Loading cargo ${weight}`);
+  }
+}
+
+type Vehicle = Car | Truck;
+
+const car = new Car();
+const truck = new Truck();
+
+const useVehicle = (vehicle: Vehicle): void => {
+  vehicle.drive();
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(500);
+  }
+};
+
+useVehicle(car);
+useVehicle(truck);
