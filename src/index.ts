@@ -1,36 +1,29 @@
-// interface Named {
-//   readonly name: string;
-// }
-
-// interface Greetable extends Named {
-//   greet(phrase: string): void;
-// }
-
-// class Person implements Greetable {
-//   name: string;
-
-//   constructor(n: string, public age: number) {
-//     this.name = n;
-//   }
-
-//   greet(phrase: string): void {
-//     console.log(`${phrase} ${this.name}. Your age is: ${this.age}`);
-//   }
-// }
-
-// let user1: Greetable;
-
-// user1 = new Person("Yar", 37);
-
-// you also can use types for it
-// type AddFn = (a: number, b: number) => number;
-interface AddFn {
-  (a: number, b: number): number;
+interface Named {
+  readonly name: string;
 }
 
-let add: AddFn = (a, b) => {
-  console.log(a + b);
-  return a + b;
-};
+interface Greetable extends Named {
+  greet(phrase: string): void;
+}
 
-add(5, 6);
+class Person implements Greetable {
+  name: string;
+  age?: number;
+
+  constructor(n: string, age?: number) {
+    this.name = n;
+
+    if (age) {
+      this.age = age;
+    }
+  }
+
+  greet(phrase: string): void {
+    console.log(`${phrase} ${this.name}. Your age is: ${this.age}`);
+  }
+}
+
+let user1: Greetable;
+
+user1 = new Person("Yar");
+console.log("user1:", user1);
