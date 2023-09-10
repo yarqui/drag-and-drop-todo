@@ -1,11 +1,8 @@
-// optional chaining lets you first check if the property exists in an object and then go further if it is
-const fetchedUser = {
-  id: "i1",
-  name: "Yar",
-  job: {
-    title: "Software Developer",
-    company: "Google",
-  },
-};
+// Nullish coalescing "??" lets you check whether the value is null or undefined.
+// Used when we accept the value to be an empty string "", for example, or a zero (falsy values)
 
-console.log(fetchedUser?.job?.company);
+const userInput = "";
+
+// ❌ const storedData = userInput || "Default value";
+const storedData = userInput ?? "Default value";
+console.log("storedData:", storedData); // storedData: ""
