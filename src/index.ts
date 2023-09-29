@@ -1,8 +1,7 @@
-// Nullish coalescing "??" lets you check whether the value is null or undefined.
-// Used when we accept the value to be an empty string "", for example, or a zero (falsy values)
+const merge = <T extends {}, V>(objA: T, objB: V) => Object.assign(objA, objB);
 
-const userInput = "";
-
-// ❌ const storedData = userInput || "Default value";
-const storedData = userInput ?? "Default value";
-console.log("storedData:", storedData); // storedData: ""
+const mergedObject = merge(
+  { nameId: "132", hobbies: ["sports", "english", "JS"] },
+  { age: 32 }
+);
+console.log("mergedObject:", mergedObject.hobbies);
