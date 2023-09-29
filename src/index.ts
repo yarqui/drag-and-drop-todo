@@ -1,7 +1,8 @@
-const merge = <T extends {}, V>(objA: T, objB: V) => Object.assign(objA, objB);
+const merge = <T extends object, V extends object>(objA: T, objB: V) =>
+  Object.assign(objA, objB);
 
 const mergedObject = merge(
   { nameId: "132", hobbies: ["sports", "english", "JS"] },
-  { age: 32 }
+  { age: 30 }
 );
-console.log("mergedObject:", mergedObject.hobbies);
+console.log("mergedObject:", mergedObject);
