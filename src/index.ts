@@ -25,3 +25,13 @@ const countAndDescribe = <T extends Lengthy>(element: T): [T, string] => {
 console.log("countAndDescribe:", countAndDescribe("We get there soon"));
 console.log("countAndDescribe:", countAndDescribe(["Gym", "Library"]));
 console.log([]);
+
+const extractAndConvert = <T extends object, U extends keyof T>(
+  obj: T,
+  key: U
+) => {
+  return `Value is ${obj[key]}`;
+};
+
+const age = extractAndConvert({ age: 37 }, "age");
+console.log("age:", age);
