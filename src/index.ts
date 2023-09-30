@@ -1,44 +1,33 @@
-class DataStorage<T> {
-  private data: T[] = [];
-
-  addItem(item: T) {
-    this.data.push(item);
-  }
-
-  removeItem(item: T) {
-    if (this.data.indexOf(item) === -1) {
-      return `No such item ${item}`;
-    }
-
-    this.data.splice(this.data.indexOf(item), 1);
-  }
-
-  getItems() {
-    return [...this.data];
-  }
+interface CourseGoal {
+  title: string;
+  description: string;
+  validUntil: Date;
 }
 
-const textStorage = new DataStorage<string>();
-textStorage.addItem("Yar");
-console.log(textStorage.getItems());
+const createCourseGoal = (
+  title: string,
+  description: string,
+  date: Date
+): CourseGoal => {
+  let courseGoal: Partial<CourseGoal> = {}; // ❗ Partial tells us that this object can consist of properties from CourseGoal, but not necessarily all of them
 
-const numberStorage = new DataStorage<number>();
-numberStorage.addItem(37);
-numberStorage.addItem(36);
-numberStorage.addItem(33);
-numberStorage.removeItem(3);
-console.log(numberStorage.getItems());
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.validUntil = date;
 
-const objectStorage = new DataStorage<object>();
-objectStorage.addItem({ name: "Yar" });
-objectStorage.addItem({ name: "Adam" });
-objectStorage.removeItem({ name: "Yar" }); // ❌ reference to  a different object
-console.log("objectStorage", objectStorage.getItems()); // ❌2 objects remain
+  console.log("courseGoal:", courseGoal);
+  return courseGoal as CourseGoal;
+};
+createCourseGoal(
+  "Postgres",
+  "introduction to SQL",
+  new Date("December 17, 2023 03:24:00")
+);
 
-// ✅ Will work this way
-const otherObjectStorage = new DataStorage<object>();
-const yarObject = { name: "Yar" };
-otherObjectStorage.addItem(yarObject);
-otherObjectStorage.addItem({ name: "Adam" });
-otherObjectStorage.removeItem(yarObject); // ✅ the same reference to an object
-console.log("otherObjectStorage", otherObjectStorage.getItems()); // ✅ only Adam object remains
+// ❗ use Readonly to mark an array or an object as a read only
+const names: Readonly<string[]> = ["Yar", "Adam", "Ira"];
+// names.push("Jose"); // ❌ TS yells "Property 'push' does not exist on type 'readonly string[]'"
+
+type T0 = Extract<"a" | "b" | "c" | "f", "a" | "f">;
+const thisType: T0 = "f";
+console.log("thisType:", thisType);
