@@ -1,37 +1,44 @@
-const merge = <T extends object, V extends object>(objA: T, objB: V) =>
-  Object.assign(objA, objB);
+class DataStorage<T> {
+  private data: T[] = [];
 
-const mergedObject = merge(
-  { nameId: "132", hobbies: ["sports", "english", "JS"] },
-  { age: 30 }
-);
-console.log("mergedObject:", mergedObject);
-
-interface Lengthy {
-  length: number;
-}
-const countAndDescribe = <T extends Lengthy>(element: T): [T, string] => {
-  let descriptionText = "No value here";
-
-  if (element.length === 1) {
-    descriptionText = `Got 1 element.`;
-  } else if (element.length > 1) {
-    descriptionText = `Got ${element.length} elements.`;
+  addItem(item: T) {
+    this.data.push(item);
   }
 
-  return [element, descriptionText];
-};
+  removeItem(item: T) {
+    if (this.data.indexOf(item) === -1) {
+      return `No such item ${item}`;
+    }
 
-console.log("countAndDescribe:", countAndDescribe("We get there soon"));
-console.log("countAndDescribe:", countAndDescribe(["Gym", "Library"]));
-console.log([]);
+    this.data.splice(this.data.indexOf(item), 1);
+  }
 
-const extractAndConvert = <T extends object, U extends keyof T>(
-  obj: T,
-  key: U
-) => {
-  return `Value is ${obj[key]}`;
-};
+  getItems() {
+    return [...this.data];
+  }
+}
 
-const age = extractAndConvert({ age: 37 }, "age");
-console.log("age:", age);
+const textStorage = new DataStorage<string>();
+textStorage.addItem("Yar");
+console.log(textStorage.getItems());
+
+const numberStorage = new DataStorage<number>();
+numberStorage.addItem(37);
+numberStorage.addItem(36);
+numberStorage.addItem(33);
+numberStorage.removeItem(3);
+console.log(numberStorage.getItems());
+
+const objectStorage = new DataStorage<object>();
+objectStorage.addItem({ name: "Yar" });
+objectStorage.addItem({ name: "Adam" });
+objectStorage.removeItem({ name: "Yar" }); // ❌ reference to  a different object
+console.log("objectStorage", objectStorage.getItems()); // ❌2 objects remain
+
+// ✅ Will work this way
+const otherObjectStorage = new DataStorage<object>();
+const yarObject = { name: "Yar" };
+otherObjectStorage.addItem(yarObject);
+otherObjectStorage.addItem({ name: "Adam" });
+otherObjectStorage.removeItem(yarObject); // ✅ the same reference to an object
+console.log("otherObjectStorage", otherObjectStorage.getItems()); // ✅ only Adam object remains
