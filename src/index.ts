@@ -1,33 +1,16 @@
-interface CourseGoal {
-  title: string;
-  description: string;
-  validUntil: Date;
+// A decorator is just a function.
+// Decorators should have arguments and are executed when the class is defined, not instantiated
+function Logger(constructor: Function): void {
+  console.log("Logging...");
+  console.log("constructor", constructor);
 }
 
-const createCourseGoal = (
-  title: string,
-  description: string,
-  date: Date
-): CourseGoal => {
-  let courseGoal: Partial<CourseGoal> = {}; // ❗ Partial tells us that this object can consist of properties from CourseGoal, but not necessarily all of them
+// To add a decorator we use @ symbol and right after it we should point to a function.
+@Logger
+class Person {
+  constructor(public name: string) {
+    console.log(`Creating a person... ${name}`);
+  }
+}
 
-  courseGoal.title = title;
-  courseGoal.description = description;
-  courseGoal.validUntil = date;
-
-  console.log("courseGoal:", courseGoal);
-  return courseGoal as CourseGoal;
-};
-createCourseGoal(
-  "Postgres",
-  "introduction to SQL",
-  new Date("December 17, 2023 03:24:00")
-);
-
-// ❗ use Readonly to mark an array or an object as a read only
-const names: Readonly<string[]> = ["Yar", "Adam", "Ira"];
-// names.push("Jose"); // ❌ TS yells "Property 'push' does not exist on type 'readonly string[]'"
-
-type T0 = Extract<"a" | "b" | "c" | "f", "a" | "f">;
-const thisType: T0 = "f";
-console.log("thisType:", thisType);
+// const yar = new Person("Yar");
