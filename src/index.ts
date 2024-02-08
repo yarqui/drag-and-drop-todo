@@ -7,12 +7,26 @@ function Logger(logString: string): Function {
   };
 }
 
+function WithTemplate(template: string, elRef: string): Function {
+  return function (constructor: any): void {
+    const box = document.getElementById(elRef);
+    const person = new constructor();
+    if (box) {
+      box.innerHTML = template;
+      box.querySelector("h1")!.textContent = person.name;
+    }
+  };
+}
+
 // Here we have to call this factory and pass the argument
-@Logger("LOGGING - PERSON...")
+// @Logger("LOGGING - PERSON...")
+@WithTemplate("<h1></h1>", "app")
 class Person {
-  constructor(public name: string) {
-    console.log(`Creating a person... ${name}`);
+  public name: string = "Yar";
+
+  constructor() {
+    console.log(`Creating a person... ${this.name}`);
   }
 }
 
-const yar = new Person("Yar");
+const yar = new Person();
