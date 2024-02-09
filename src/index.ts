@@ -35,14 +35,48 @@
 //   }
 // }
 
-function Log(target: any, propertyName: string | Symbol) {
-  console.log("Property decorator");
+function LogProperty(target: any, propertyName: string | Symbol) {
+  console.log("Property decorator----------------------------");
   console.log("target: ", target);
   console.log("propertyName: ", propertyName);
 }
 
+function LogAccessor(
+  target: any,
+  name: string,
+  descriptor: PropertyDescriptor
+) {
+  console.log("Accessor decorator----------------------------");
+  console.log("target: ", target);
+  console.log("name: ", name);
+  console.log("descriptor: ", descriptor);
+}
+
+// Method decorator is the same as a the Accessor decorator
+function LogMethod(
+  target: any,
+  name: string | Symbol,
+  descriptor: PropertyDescriptor
+) {
+  console.log("Method decorator----------------------------");
+  console.log("target: ", target);
+  console.log("name: ", name);
+  console.log("descriptor: ", descriptor);
+}
+
+function LogParameter(
+  target: any,
+  methodName: string | Symbol,
+  position: number
+) {
+  console.log("Parameter decorator----------------------------");
+  console.log("target: ", target);
+  console.log("methodName: ", methodName);
+  console.log("position: ", position);
+}
+
 class Product {
-  @Log
+  @LogProperty
   title: string;
   private _price: number;
 
@@ -51,6 +85,7 @@ class Product {
     this._price = price;
   }
 
+  @LogAccessor
   set price(val: number) {
     if (val > 0) {
       this._price = val;
@@ -61,12 +96,13 @@ class Product {
     return this._price;
   }
 
-  getPriceWithTax(tax: number) {
+  @LogMethod
+  getPriceWithTax(@LogParameter tax: number) {
     return this._price * (1 + tax);
   }
 }
 
-const p = new Product("Mercedes", 10);
-console.log(p.getPriceWithTax(10));
-console.log((p.price = 5));
-console.log(p.getPriceWithTax(10));
+// const p = new Product("Mercedes", 10);
+// console.log(p.getPriceWithTax(10));
+// console.log((p.price = 5));
+// console.log(p.getPriceWithTax(10));
