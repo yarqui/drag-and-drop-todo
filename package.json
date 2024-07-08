@@ -1,16 +1,14 @@
 {
   "name": "ts-proj",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "web-dev-server --node-resolve --open --watch"
+    "start": "lite-server"
   },
   "author": "Yaroslav Pelykh",
   "license": "ISC",
   "devDependencies": {
-    "@web/dev-server": "^0.3.0",
     "lite-server": "^2.5.4"
   }
 }
