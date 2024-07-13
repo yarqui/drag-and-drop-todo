@@ -130,21 +130,24 @@ function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 // Component Base class
 abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   templateEl: HTMLTemplateElement;
-  rootEl: T;
+  hostEl: T;
   element: U;
 
   constructor(
     templateId: string,
-    rootElId: string,
+    hostElId: string,
     insertAtStart: boolean,
     newElId?: string
   ) {
-    this.templateEl = <HTMLTemplateElement>document.getElementById(templateId);
-    this.rootEl = <T>document.getElementById(rootElId);
+    this.templateEl = document.getElementById(
+      templateId
+    ) as HTMLTemplateElement;
+
+    this.hostEl = document.getElementById(hostElId) as T;
     const importedNode = <DocumentFragment>(
       document.importNode(this.templateEl.content, true)
     );
-    this.element = <U>importedNode.firstElementChild;
+    this.element = importedNode.firstElementChild as U;
     // FIXME: ?
     newElId && (this.element.id = newElId);
 
@@ -152,7 +155,7 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   }
 
   private attach(insertAtBeginning: boolean) {
-    this.rootEl.insertAdjacentElement(
+    this.hostEl.insertAdjacentElement(
       insertAtBeginning ? "afterbegin" : "beforeend",
       this.element
     );
@@ -164,9 +167,34 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
 
 // Project Item class
 
-class ProjectItem {
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  private project: Project;
 
-  constructor(){}
+  constructor(hostId: string, project: Project) {
+    super("single-project", hostId, false, project.id);
+    this.project = project;
+
+    this.configure();
+    this.renderContent();
+  }
+
+  get persons() {
+    return this.project.people > 1
+      ? `${this.project.people} persons`
+      : "1 person";
+  }
+
+  configure() {}
+
+  renderContent(): void {
+    (this.element.querySelector("h2") as HTMLHeadingElement).textContent =
+      this.project.title;
+    (
+      this.element.querySelector("h3") as HTMLHeadingElement
+    ).textContent = `${this.persons} assigned`;
+    (this.element.querySelector("p") as HTMLParagraphElement).textContent =
+      this.project.description;
+  }
 }
 
 // ProjectList Class
@@ -197,22 +225,23 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
 
   renderContent() {
     const listId = `${this.type}-projects-list`;
-    this.element.querySelector("ul")!.id = listId;
-    this.element.querySelector(
-      "h2"
-    )!.textContent = `${this.type.toUpperCase()} PROJECTS`;
+    (this.element.querySelector("ul") as HTMLUListElement).id = listId;
+    (
+      this.element.querySelector("h2") as HTMLHeadElement
+    ).textContent = `${this.type.toUpperCase()} PROJECTS`;
   }
 
   private renderProjects() {
-    const listEl = <HTMLUListElement>(
-      document.getElementById(`${this.type}-projects-list`)
-    );
+    const listEl = document.getElementById(
+      `${this.type}-projects-list`
+    ) as HTMLUListElement;
     listEl.innerHTML = "";
 
     for (const prjItem of this.assignedProjects) {
-      const listItem = document.createElement("li");
-      listItem.textContent = prjItem.title;
-      listEl?.appendChild(listItem);
+      new ProjectItem(
+        (this.element.querySelector("ul") as HTMLUListElement).id,
+        prjItem
+      );
     }
   }
 }
@@ -226,13 +255,16 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   constructor() {
     super("project-input", "app", true, "user-input");
 
-    this.titleInputEl = <HTMLInputElement>this.element.querySelector("#title");
-    this.descriptionInputEl = <HTMLInputElement>(
-      this.element.querySelector("#description")
-    );
-    this.peopleInputEl = <HTMLInputElement>(
-      this.element.querySelector("#people")
-    );
+    this.titleInputEl = this.element.querySelector(
+      "#title"
+    ) as HTMLInputElement;
+    this.descriptionInputEl = this.element.querySelector(
+      "#description"
+    ) as HTMLInputElement;
+    this.peopleInputEl = this.element.querySelector(
+      "#people"
+    ) as HTMLInputElement;
+
     this.configure();
   }
 
